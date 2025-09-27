@@ -71,3 +71,38 @@ Metrics reported on validation and test sets.
 |------|-----------------|-----------------|
 | Classification | Logistic Regression, Decision Tree | Accuracy, F1 |
 | Regression | Linear Regression, Decision Tree Regressor | MAE, RMSE |
+
+---
+
+## 6. Reproducibility Plan
+
+To ensure results are reproducible, we’re using MLFlow tracking API to keep 
+track of runs while training models. In terms of data management, we directly 
+import the UCI Library as part of requirements.txt to minimize complications 
+during setup. Additionally, we have implemented checks to ensure that any 
+structural changes made to UCI’s Library will result in minimal impact 
+on our program. For all tests, the standard random seed will be set to 3.
+
+- **Project Dependencies**
+  - pandas
+  - numpy
+  - scikit-learn
+  - mlflow
+  - ucimlrepo
+  - matplotlib
+  - PyTorch/TensorFlow
+
+
+- **Repository Structure**
+```
+project/
+├── README.md                 # This file
+├── requirements.txt          # Python dependencies
+├── src/                      # Source code
+│   ├── data.py              # Dataset loading
+│   ├── tasks.py             # Regression + classification helpers
+│   ├── split.py             # Train/val/test split helpers
+│   └── preview_targets.py   # Dataset stats for proposal
+└── docs/
+    └── PROPOSAL.md          # Draft proposal
+```

@@ -390,9 +390,7 @@ def main():
     X_train_dt, X_val_dt, X_test_dt, _, _ = preprocess_data(
         X_train, X_val, X_test, numeric_features, categorical_features, scale_numeric=False
     )
-    dt_clf = DecisionTreeClassifier(
-        random_state=RANDOM_SEED, max_depth=10, min_samples_split=10
-    )
+    dt_clf = DecisionTreeClassifier(random_state=RANDOM_SEED, max_depth=10, min_samples_split=10)
     result_dt_clf = train_classification_model(
         X_train_dt,
         y_cls_train,
@@ -408,7 +406,9 @@ def main():
 
     # Determine best classification model
     best_clf = max(classification_results, key=lambda x: x["val_f1"])
-    print(f"\n✅ Best Classification Model: {best_clf['model_name']} (Val F1: {best_clf['val_f1']:.4f})")
+    print(
+        f"\n✅ Best Classification Model: {best_clf['model_name']} (Val F1: {best_clf['val_f1']:.4f})"
+    )
 
     # Generate confusion matrix for best model
     print("\n[6/9] Generating confusion matrix...")
@@ -464,7 +464,9 @@ def main():
 
     # Determine best regression model
     best_reg = min(regression_results, key=lambda x: x["val_rmse"])
-    print(f"\n✅ Best Regression Model: {best_reg['model_name']} (Val RMSE: {best_reg['val_rmse']:.4f})")
+    print(
+        f"\n✅ Best Regression Model: {best_reg['model_name']} (Val RMSE: {best_reg['val_rmse']:.4f})"
+    )
 
     # Generate residuals plot for best model
     print("\n[9/9] Generating residuals plot...")

@@ -32,9 +32,9 @@ from sklearn.metrics import (
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
-from data import load_energy_efficiency
-from split import train_val_test_split_indices
-from tasks import make_classification_labels_from_hl
+from .data import load_energy_efficiency
+from .split import train_val_test_split_indices
+from .tasks import make_classification_labels_from_hl
 
 # Configuration
 RANDOM_SEED = 42

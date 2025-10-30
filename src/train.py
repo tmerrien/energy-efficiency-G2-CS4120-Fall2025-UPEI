@@ -72,8 +72,8 @@ def prepare_features(df: pd.DataFrame) -> Tuple[pd.DataFrame, list, list]:
     X = df.drop(columns=target_cols, errors="ignore")
 
     # Identify categorical vs numeric features
-    # Based on UCI docs: orientation and glazing_area_distribution are categorical
-    categorical_features = ["orientation", "glazing_area_distribution"]
+    # Based on UCI docs: x6 (orientation) and x8 (glazing_area_distribution) are categorical
+    categorical_features = ["x6", "x8"]
     numeric_features = [col for col in X.columns if col not in categorical_features]
 
     return X, numeric_features, categorical_features

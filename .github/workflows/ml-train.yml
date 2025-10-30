@@ -30,50 +30,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install matplotlib seaborn
-        
-    - name: Create output directories
-      run: |
-        mkdir -p outputs/models
-        mkdir -p outputs/plots
-        mkdir -p outputs/metrics
+        pip install tabulate
         
     - name: Train models and generate metrics
       run: |
-        # This is a placeholder - replace with your actual training script
-        echo "Training models..."
-        python -m src.preview_targets > outputs/metrics/data_summary.txt
-        
-        # Create a sample metrics file for CML
-        cat > outputs/metrics/results.txt << EOF
-        ## Model Training Results
-        
-        ### Classification Task
-        - **Logistic Regression**
-          - Validation Accuracy: TBD
-          - Validation F1: TBD
-          - Test Accuracy: TBD
-          - Test F1: TBD
-        
-        - **Decision Tree**
-          - Validation Accuracy: TBD
-          - Validation F1: TBD
-          - Test Accuracy: TBD
-          - Test F1: TBD
-        
-        ### Regression Task
-        - **Linear Regression**
-          - Validation MAE: TBD
-          - Validation RMSE: TBD
-          - Test MAE: TBD
-          - Test RMSE: TBD
-        
-        - **Decision Tree Regressor**
-          - Validation MAE: TBD
-          - Validation RMSE: TBD
-          - Test MAE: TBD
-          - Test RMSE: TBD
-        EOF
+        echo "🚀 Running baseline training pipeline..."
+        python -m src.train
         
     - name: Setup CML
       uses: iterative/setup-cml@v2
@@ -82,11 +44,52 @@ jobs:
       env:
         REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # Create markdown report
-        cat outputs/metrics/results.txt >> report.md
+        # Create markdown report header
+        echo "## 🧪 ML Training Results" > report.md
         echo "" >> report.md
-        echo "### Data Summary" >> report.md
-        cat outputs/metrics/data_summary.txt >> report.md
+        echo "### 🎯 Classification Task: High/Low Heating Load" >> report.md
+        echo "" >> report.md
+        
+        # Add classification results table
+        python -c "
+        import pandas as pd
+        df = pd.read_csv('outputs/metrics/classification_results.csv')
+        print(df.to_markdown(index=False))
+        " >> report.md
+        
+        echo "" >> report.md
+        echo "### 📊 Regression Task: Heating Load (Continuous)" >> report.md
+        echo "" >> report.md
+        
+        # Add regression results table
+        python -c "
+        import pandas as pd
+        df = pd.read_csv('outputs/metrics/regression_results.csv')
+        print(df.to_markdown(index=False))
+        " >> report.md
+        
+        echo "" >> report.md
+        echo "### 🔧 Configuration" >> report.md
+        echo "" >> report.md
+        echo "\`\`\`json" >> report.md
+        cat outputs/metrics/config.json >> report.md
+        echo "\`\`\`" >> report.md
+        
+        echo "" >> report.md
+        echo "### 🖼️ Visualizations" >> report.md
+        echo "" >> report.md
+        
+        # Add confusion matrix
+        echo "#### Confusion Matrix (Best Classification Model)" >> report.md
+        echo "![Confusion Matrix](outputs/plots/confusion_matrix_decision_tree.png)" >> report.md
+        cml publish outputs/plots/confusion_matrix_decision_tree.png --md >> report.md
+        
+        echo "" >> report.md
+        
+        # Add residuals plot
+        echo "#### Residuals Plot (Best Regression Model)" >> report.md
+        echo "![Residuals](outputs/plots/residuals_decision_tree_regressor.png)" >> report.md
+        cml publish outputs/plots/residuals_decision_tree_regressor.png --md >> report.md
         
         # Post report as PR comment
         cml comment create report.md

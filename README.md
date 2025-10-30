@@ -19,7 +19,11 @@ Our approach will compare **classical ML baselines** with a **Neural Network (NN
 
 ### Install Dependencies
 ```bash
+# Production dependencies only
 pip install -r requirements.txt
+
+# Or, for development (includes testing and linting tools)
+pip install -r requirements-dev.txt
 ```
 
 ### Run Preview Script
@@ -28,19 +32,37 @@ pip install -r requirements.txt
 python -m src.preview_targets
 ```
 
+## CI/CD Pipeline
+
+This project uses **GitHub Actions** for automated code quality checks and ML experiment tracking. Every pull request triggers:
+- Code formatting and linting checks (Black, isort, Flake8)
+- Automated test execution
+- ML training with automated reports posted as PR comments (via CML)
+
+📖 **[View CI/CD Documentation](.github/workflows/README.md)**
+
 ## Repository Structure
 
 ```
 project/
 ├── README.md                 # This file
-├── requirements.txt          # Python dependencies
+├── requirements.txt          # Production dependencies
+├── requirements-dev.txt      # Development dependencies
+├── pyproject.toml            # Tool configurations (Black, isort, pytest)
+├── .flake8                   # Linting configuration
+├── .github/
+│   └── workflows/            # CI/CD pipeline definitions
+│       ├── README.md         # CI/CD documentation
+│       ├── ci.yml            # Code quality checks
+│       └── ml-train.yml      # ML training & reporting
 ├── src/                      # Source code
 │   ├── data.py              # Dataset loading
 │   ├── tasks.py             # Regression + classification helpers
 │   ├── split.py             # Train/val/test split helpers
 │   └── preview_targets.py   # Dataset stats for proposal
 └── docs/
-    └── PROPOSAL.md          # Draft proposal
+    ├── PROPOSAL.md           # Project proposal
+    └── MIDPOINT.md           # Midpoint report
 ```
 
 ## Dataset Information

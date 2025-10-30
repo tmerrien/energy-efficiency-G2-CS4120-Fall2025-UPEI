@@ -21,7 +21,7 @@ import mlflow
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
+from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
@@ -34,7 +34,6 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
 from .data import load_energy_efficiency
 from .split import train_val_test_split_indices
-from .tasks import make_classification_labels_from_hl
 
 # Configuration
 RANDOM_SEED = 42
@@ -497,7 +496,7 @@ def main():
     )
     clf_table_path = METRICS_DIR / "classification_results.csv"
     clf_table.to_csv(clf_table_path, index=False)
-    print(f"\n📊 Classification Results:")
+    print("\n📊 Classification Results:")
     print(clf_table.to_string(index=False))
     print(f"Saved: {clf_table_path}")
 
@@ -516,7 +515,7 @@ def main():
     )
     reg_table_path = METRICS_DIR / "regression_results.csv"
     reg_table.to_csv(reg_table_path, index=False)
-    print(f"\n📊 Regression Results:")
+    print("\n📊 Regression Results:")
     print(reg_table.to_string(index=False))
     print(f"Saved: {reg_table_path}")
 

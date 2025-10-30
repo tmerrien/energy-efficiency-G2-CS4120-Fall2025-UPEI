@@ -81,15 +81,13 @@ jobs:
         
         # Add confusion matrix
         echo "#### Confusion Matrix (Best Classification Model)" >> report.md
-        echo "![Confusion Matrix](outputs/plots/confusion_matrix_decision_tree.png)" >> report.md
-        cml publish outputs/plots/confusion_matrix_decision_tree.png --md >> report.md
+        echo "![Confusion Matrix](./outputs/plots/confusion_matrix_decision_tree.png)" >> report.md
         
         echo "" >> report.md
         
         # Add residuals plot
         echo "#### Residuals Plot (Best Regression Model)" >> report.md
-        echo "![Residuals](outputs/plots/residuals_decision_tree_regressor.png)" >> report.md
-        cml publish outputs/plots/residuals_decision_tree_regressor.png --md >> report.md
+        echo "![Residuals](./outputs/plots/residuals_decision_tree_regressor.png)" >> report.md
         
-        # Post report as PR comment
+        # Post report as PR comment with inline images
         cml comment create report.md

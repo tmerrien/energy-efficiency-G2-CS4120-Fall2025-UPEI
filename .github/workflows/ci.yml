@@ -1,0 +1,47 @@
+name: CI - Code Quality & Tests
+
+on:
+  pull_request:
+    branches: [ main, midpoint ]
+  push:
+    branches: [ main, midpoint ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flake8 black isort
+        
+    - name: Code formatting check (Black)
+      run: |
+        black --check src/
+      continue-on-error: true
+      
+    - name: Import sorting check (isort)
+      run: |
+        isort --check-only src/
+      continue-on-error: true
+      
+    - name: Linting (Flake8)
+      run: |
+        flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 src/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      continue-on-error: true
+      
+    - name: Verify data loading
+      run: |
+        python -m src.utils.preview_targets

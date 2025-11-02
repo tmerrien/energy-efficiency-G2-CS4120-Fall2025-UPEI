@@ -1,0 +1,93 @@
+name: ML Training & Evaluation
+
+on:
+  pull_request:
+    branches: [ main, midpoint ]
+    paths:
+      - 'src/**'
+      - 'requirements.txt'
+      - '.github/workflows/ml-train.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install tabulate
+        
+    - name: Train models and generate metrics
+      run: |
+        echo "🚀 Running baseline training pipeline..."
+        python -m src.train
+        
+    - name: Setup CML
+      uses: iterative/setup-cml@v2
+      
+    - name: Create CML report
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Create markdown report header
+        echo "## 🧪 ML Training Results" > report.md
+        echo "" >> report.md
+        echo "### 🎯 Classification Task: High/Low Heating Load" >> report.md
+        echo "" >> report.md
+        
+        # Add classification results table
+        python -c "
+        import pandas as pd
+        df = pd.read_csv('outputs/metrics/classification_results.csv')
+        print(df.to_markdown(index=False))
+        " >> report.md
+        
+        echo "" >> report.md
+        echo "### 📊 Regression Task: Heating Load (Continuous)" >> report.md
+        echo "" >> report.md
+        
+        # Add regression results table
+        python -c "
+        import pandas as pd
+        df = pd.read_csv('outputs/metrics/regression_results.csv')
+        print(df.to_markdown(index=False))
+        " >> report.md
+        
+        echo "" >> report.md
+        echo "### 🔧 Configuration" >> report.md
+        echo "" >> report.md
+        echo "\`\`\`json" >> report.md
+        cat outputs/metrics/config.json >> report.md
+        echo "\`\`\`" >> report.md
+        
+        echo "" >> report.md
+        echo "### 🖼️ Visualizations" >> report.md
+        echo "" >> report.md
+        
+        # Add confusion matrix
+        echo "#### Confusion Matrix (Best Classification Model)" >> report.md
+        echo "![Confusion Matrix](./outputs/plots/confusion_matrix_decision_tree.png)" >> report.md
+        
+        echo "" >> report.md
+        
+        # Add residuals plot
+        echo "#### Residuals Plot (Best Regression Model)" >> report.md
+        echo "![Residuals](./outputs/plots/residuals_decision_tree_regressor.png)" >> report.md
+        
+        # Post report as PR comment with inline images
+        cml comment create report.md

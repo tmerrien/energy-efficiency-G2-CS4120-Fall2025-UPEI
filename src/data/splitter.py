@@ -1,16 +1,19 @@
 from __future__ import annotations
+
 from typing import Tuple
+
 import numpy as np
 from sklearn.model_selection import train_test_split
 
 RANDOM_SEED = 42
 
+
 def train_val_test_split_indices(
-        n_samples: int,
-        y_for_stratify: np.ndarray | None = None,
-        test_size: float = 0.2,
-        val_size: float = 0.2,
-        random_seed: int = RANDOM_SEED,
+    n_samples: int,
+    y_for_stratify: np.ndarray | None = None,
+    test_size: float = 0.2,
+    val_size: float = 0.2,
+    random_seed: int = RANDOM_SEED,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
 

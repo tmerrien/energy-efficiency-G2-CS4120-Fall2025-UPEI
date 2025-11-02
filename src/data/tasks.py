@@ -1,14 +1,17 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Dict, Optional, Tuple
+
 import numpy as np
 import pandas as pd
 
 # --------- Regression target ---------
 
+
 def get_regression_target(
-        df: pd.DataFrame,
-        target_col: str = "heating_load",
+    df: pd.DataFrame,
+    target_col: str = "heating_load",
 ) -> np.ndarray:
     """
 
@@ -30,7 +33,9 @@ def get_regression_target(
 
     return y
 
+
 # --------- Classification labels (High/Low via threshold) ---------
+
 
 @dataclass(frozen=True)
 class ClasLabelInfo:
@@ -40,10 +45,11 @@ class ClasLabelInfo:
     positive_name: str = "High"
     negative_name: str = "Low"
 
+
 def make_classification_labels_from_hl(
-        df: pd.DataFrame,
-        target_col: str = "heating_load",
-        threshold: Optional[float] = None,
+    df: pd.DataFrame,
+    target_col: str = "heating_load",
+    threshold: Optional[float] = None,
 ) -> Tuple[np.ndarray, ClasLabelInfo]:
     """
 
@@ -61,6 +67,7 @@ def make_classification_labels_from_hl(
 
     info = ClasLabelInfo(threshold=thr)
     return y_cls, info
+
 
 def class_distribution(y_cls: np.ndarray) -> Dict[int, int]:
     """

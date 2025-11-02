@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import pandas as pd
 from ucimlrepo import fetch_ucirepo
+
 
 def load_energy_efficiency() -> pd.DataFrame:
     """
@@ -15,22 +17,15 @@ def load_energy_efficiency() -> pd.DataFrame:
     df = pd.concat([X, y], axis=1)
 
     # Standardize column names
-    df.columns = (
-        df.columns
-            .str.strip()
-            .str.lower()
-            .str.replace(" ", "_")
-    )
-    
+    df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
+
     # Map generic column names to meaningful names for the Energy Efficiency dataset
     # Based on UCI ML Repository: y1 = Heating Load, y2 = Cooling Load
-    column_mapping = {
-        'y1': 'heating_load',
-        'y2': 'cooling_load'
-    }
+    column_mapping = {"y1": "heating_load", "y2": "cooling_load"}
     df = df.rename(columns=column_mapping)
 
     return df
+
 
 if __name__ == "__main__":
     df = load_energy_efficiency()

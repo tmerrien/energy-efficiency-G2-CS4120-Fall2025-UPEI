@@ -4,9 +4,9 @@ from collections import Counter
 
 import numpy as np
 
-from src.data import load_energy_efficiency
-from src.split import train_val_test_split_indices
-from src.tasks import get_regression_target, make_classification_labels_from_hl
+from src.data.loader import load_energy_efficiency
+from src.data.splitter import train_val_test_split_indices
+from src.data.tasks import get_regression_target, make_classification_labels_from_hl
 
 
 def main() -> None:

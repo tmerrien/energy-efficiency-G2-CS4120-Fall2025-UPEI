@@ -23,9 +23,7 @@ from .split import train_val_test_split_indices
 
 def main():
     """Main training orchestrator."""
-    print("=" * 80)
     print("BASELINE MODELS TRAINING PIPELINE")
-    print("=" * 80)
 
     np.random.seed(RANDOM_SEED)
 
@@ -121,9 +119,7 @@ def main():
         categorical_features,
     )
 
-    print("\n" + "=" * 80)
-    print("TRAINING COMPLETE")
-    print("=" * 80)
+    print("\nTRAINING COMPLETE")
 
 
 if __name__ == "__main__":

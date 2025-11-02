@@ -29,9 +29,7 @@ def run_classification_pipeline(
     Returns:
         List of classification results dictionaries
     """
-    print("\n" + "=" * 80)
-    print("CLASSIFICATION TASK: High/Low Heating Load")
-    print("=" * 80)
+    print("\nCLASSIFICATION TASK: High/Low Heating Load")
 
     classification_results = []
 

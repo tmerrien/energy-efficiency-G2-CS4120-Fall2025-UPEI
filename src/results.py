@@ -17,9 +17,7 @@ def save_results(
     categorical_features: list,
 ):
     """Save all training results to disk."""
-    print("\n" + "=" * 80)
-    print("SAVING RESULTS SUMMARY")
-    print("=" * 80)
+    print("\nSAVING RESULTS SUMMARY")
 
     # Classification results table
     clf_table = pd.DataFrame(

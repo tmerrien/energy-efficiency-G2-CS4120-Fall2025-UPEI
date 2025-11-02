@@ -28,9 +28,7 @@ def run_regression_pipeline(
     Returns:
         List of regression results dictionaries
     """
-    print("\n" + "=" * 80)
-    print("REGRESSION TASK: Heating Load (Continuous)")
-    print("=" * 80)
+    print("\nREGRESSION TASK: Heating Load (Continuous)")
 
     regression_results = []
 

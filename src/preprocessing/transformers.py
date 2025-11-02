@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from .config import CATEGORICAL_FEATURES, TARGET_COL
+from ..config import CATEGORICAL_FEATURES, TARGET_COL
 
 
 def sanity_check_data(df: pd.DataFrame) -> None:

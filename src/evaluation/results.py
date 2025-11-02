@@ -6,7 +6,7 @@ import json
 
 import pandas as pd
 
-from .config import METRICS_DIR, RANDOM_SEED, TARGET_COL, TEST_SIZE, TRAIN_SIZE, VAL_SIZE
+from ..config import METRICS_DIR, RANDOM_SEED, TARGET_COL, TEST_SIZE, TRAIN_SIZE, VAL_SIZE
 
 
 def save_results(

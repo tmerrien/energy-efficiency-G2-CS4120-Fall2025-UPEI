@@ -13,7 +13,7 @@ from sklearn.metrics import (
     mean_squared_error,
 )
 
-from .config import RANDOM_SEED
+from ..config import RANDOM_SEED
 
 
 def train_classification_model(

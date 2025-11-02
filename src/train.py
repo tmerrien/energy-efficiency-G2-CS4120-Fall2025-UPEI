@@ -12,13 +12,13 @@ High-level workflow:
 import mlflow
 import numpy as np
 
-from .classification_pipeline import run_classification_pipeline
 from .config import RANDOM_SEED, TARGET_COL, TEST_SIZE, VAL_SIZE
-from .data import load_energy_efficiency
-from .preprocessing import prepare_features, sanity_check_data
-from .regression_pipeline import run_regression_pipeline
-from .results import save_results
-from .split import train_val_test_split_indices
+from .data.loader import load_energy_efficiency
+from .data.splitter import train_val_test_split_indices
+from .evaluation.results import save_results
+from .pipelines.classification import run_classification_pipeline
+from .pipelines.regression import run_regression_pipeline
+from .preprocessing.transformers import prepare_features, sanity_check_data
 
 
 def main():

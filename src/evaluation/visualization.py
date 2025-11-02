@@ -8,7 +8,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
 
-from .config import PLOTS_DIR
+from ..config import PLOTS_DIR
 
 
 def plot_confusion_matrix(y_true: np.ndarray, y_pred: np.ndarray, model_name: str) -> str:

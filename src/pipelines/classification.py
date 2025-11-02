@@ -6,10 +6,10 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 
-from .config import RANDOM_SEED
-from .models import train_classification_model
-from .preprocessing import preprocess_data
-from .visualization import plot_confusion_matrix, plot_target_distribution
+from ..config import RANDOM_SEED
+from ..models.trainers import train_classification_model
+from ..preprocessing.transformers import preprocess_data
+from ..evaluation.visualization import plot_confusion_matrix, plot_target_distribution
 
 
 def run_classification_pipeline(

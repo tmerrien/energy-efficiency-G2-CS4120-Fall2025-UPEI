@@ -6,10 +6,10 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 
-from .config import RANDOM_SEED
-from .models import train_regression_model
-from .preprocessing import preprocess_data
-from .visualization import plot_correlation_heatmap, plot_residuals
+from ..config import RANDOM_SEED
+from ..models.trainers import train_regression_model
+from ..preprocessing.transformers import preprocess_data
+from ..evaluation.visualization import plot_correlation_heatmap, plot_residuals
 
 
 def run_regression_pipeline(

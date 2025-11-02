@@ -74,6 +74,8 @@ the subsets. This ensured a strong class representation during both training and
 - Why one-hot encode categorical features (x6, x8)?
 - Why standardize numeric features for linear models but not trees?
 - How did you prevent data leakage?
+- How does our modular preprocessing pipeline (src/preprocessing/, src/data/) support reproducibility?
+- How does the CI/CD pipeline validate data integrity?
 -->
 Categorical features were one-hot encoded. This means that each category has been turned into its own
 binary column. This allowed the model to understand categorical data without assigning an importance or
@@ -155,44 +157,15 @@ significant issue.
 
 ### Discussion and Neural Network Plan
 
-**TODO: Synthesize findings and outline next steps**
+Our baseline models performed very well, with Decision Trees achieving 97.40% classification accuracy 
+and an MAE of 0.39 for regression. The tree-based models significantly outperformed linear models,
+suggesting a non-linear relationship between building features and energy loads. To support this work,
+we built a modular architecture with separate modules for data processing, training, and evaluation.
+We also integrated MLflow for experiment tracking and set up a CI/CD pipeline to ensure reproducibility
+and deployment readiness.
 
-#### Key Findings
-<!-- Summarize your main observations:
-- How well do baseline models perform overall?
-- Are the tasks (classification and regression) easy or hard for these models?
-- Which task appears more challenging?
-- What do the results suggest about the dataset?
--->
-
-#### Model Comparison
-<!-- Compare linear vs tree-based approaches:
-- Which family of models performed better?
-- Why might trees outperform (or not outperform) linear models here?
-- What does this tell you about the relationship between features and targets?
--->
-
-#### Limitations and Observations
-<!-- Reflect on limitations:
-- What assumptions do your baseline models make?
-- Are there any concerning patterns in the results?
-- What might be missing from this analysis?
--->
-
-#### Neural Network Plan
-<!-- Outline your NN approach for the final report:
-- What type of NN architecture are you considering? (MLP, CNN, etc.)
-- How many layers and neurons?
-- What activation functions?
-- How will you compare NN performance to these baselines?
-- What improvements do you hope to see from the NN?
--->
-
-#### Next Steps
-<!-- List concrete next steps:
-- Design and implement neural network
-- Tune hyperparameters
-- Compare with baselines
-- Analyze where NN improves (or doesn't)
-- Complete final report
--->
+For the next phase, we will explore neural networks to see if they can capture even more complex patterns
+in the data. As we learn about different architectures in the coming weeks, we will determine the best
+approach for our dataset. The neural network will integrate into our existing modular pipeline and leverage
+MLflow for experiment tracking. Our goal is to improve upon the strong Decision Tree baseline while
+maintaining reproducibility and preparing deployment-ready model artifacts.

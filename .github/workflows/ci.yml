@@ -53,4 +53,4 @@ jobs:
       
     - name: Verify data loading
       run: |
-        python -m src.preview_targets
+        python -m src.utils.preview_targets

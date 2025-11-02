@@ -32,7 +32,7 @@ pip install -r requirements-dev.txt
 ### Run Preview Script
 ```bash
 # From the project root directory
-python -m src.preview_targets
+python -m src.utils.preview_targets
 ```
 
 ## CI/CD Pipeline

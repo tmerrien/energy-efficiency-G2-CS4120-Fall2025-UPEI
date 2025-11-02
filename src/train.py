@@ -32,8 +32,8 @@ from sklearn.metrics import (
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
-from .data import load_energy_efficiency
-from .split import train_val_test_split_indices
+from data import load_energy_efficiency
+from split import train_val_test_split_indices
 
 # Configuration
 RANDOM_SEED = 42
@@ -289,6 +289,42 @@ def plot_residuals(y_true: np.ndarray, y_pred: np.ndarray, model_name: str) -> s
     return str(plot_path)
 
 
+def plot_target_distribution(y_true: np.ndarray, y_pred: np.ndarray, model_name: str) -> str:
+
+    df = pd.DataFrame({
+        "Label": np.concatenate([y_true, y_pred]),
+        "Type": ["True"] * len(y_true) + ["Predicted"] * len(y_pred)
+    })
+
+    plt.figure(figsize=(8, 6))
+    sns.countplot(data=df, x="Label", hue="Type")
+
+    plt.title(f"Target Distribution {model_name}")
+    plt.xlabel("Class")
+    plt.ylabel("Count")
+
+    plt.tight_layout()
+    plot_path = PLOTS_DIR / f"target_distribution_{model_name.lower().replace(' ', '_')}.png"
+    plt.savefig(plot_path, dpi=150, bbox_inches="tight")
+    plt.close()
+
+    return str(plot_path)
+
+def plot_correlation_heatmap(x_train: np.ndarray,numeric_features: list, model_name: str) -> str:
+    df_num = pd.DataFrame(x_train, columns=numeric_features)
+    corr = df_num.corr()
+
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f", square=True, cbar_kws={"shrink": 0.8})
+    plt.title(f"Correlation Heatmap {model_name}")
+
+    plt.tight_layout()
+    plot_path = PLOTS_DIR / f"correlation_heatmap_{model_name.lower().replace(' ', '_')}.png"
+    plt.savefig(plot_path, dpi=150, bbox_inches="tight")
+    plt.close()
+
+    return str(plot_path)
+
 def main():
     """Main training pipeline."""
     print("=" * 80)
@@ -299,18 +335,18 @@ def main():
     np.random.seed(RANDOM_SEED)
 
     # 1. Load data and sanity check
-    print("\n[1/9] Loading data...")
+    print("\n[1/11] Loading data...")
     df = load_energy_efficiency()
     sanity_check_data(df)
 
     # 2. Prepare features
-    print("\n[2/9] Preparing features...")
+    print("\n[2/11] Preparing features...")
     X, numeric_features, categorical_features = prepare_features(df)
     print(f"Numeric features: {numeric_features}")
     print(f"Categorical features: {categorical_features}")
 
     # 3. Create classification labels from training set ONLY
-    print("\n[3/9] Creating train/val/test splits...")
+    print("\n[3/11] Creating train/val/test splits...")
     # First, get initial splits to compute threshold on train only
     y_regression = df[TARGET_COL].values
     idx_train, idx_val, idx_test = train_val_test_split_indices(
@@ -366,7 +402,7 @@ def main():
     classification_results = []
 
     # Logistic Regression (with scaled features)
-    print("\n[4/9] Training Logistic Regression...")
+    print("\n[4/11] Training Logistic Regression...")
     X_train_lr, X_val_lr, X_test_lr, _, _ = preprocess_data(
         X_train, X_val, X_test, numeric_features, categorical_features, scale_numeric=True
     )
@@ -385,7 +421,7 @@ def main():
     classification_results.append(result_lr)
 
     # Decision Tree (no scaling needed)
-    print("\n[5/9] Training Decision Tree Classifier...")
+    print("\n[5/11] Training Decision Tree Classifier...")
     X_train_dt, X_val_dt, X_test_dt, _, _ = preprocess_data(
         X_train, X_val, X_test, numeric_features, categorical_features, scale_numeric=False
     )
@@ -410,11 +446,17 @@ def main():
     )
 
     # Generate confusion matrix for best model
-    print("\n[6/9] Generating confusion matrix...")
+    print("\n[6/11] Generating confusion matrix...")
     cm_path = plot_confusion_matrix(
         best_clf["y_test"], best_clf["y_test_pred"], best_clf["model_name"]
     )
     print(f"Saved: {cm_path}")
+
+    # Generate target distribution plot for best model
+    print("\n[7/11] Generating target distribution plot...")
+    target_dist_path = plot_target_distribution(best_clf["y_test"], best_clf["y_test_pred"],
+                                                best_clf["model_name"])
+    print(f"Saved: {target_dist_path}")
 
     # =========================================================================
     # REGRESSION TASK
@@ -426,7 +468,7 @@ def main():
     regression_results = []
 
     # Linear Regression (with scaled features)
-    print("\n[7/9] Training Linear Regression...")
+    print("\n[8/11] Training Linear Regression...")
     X_train_linreg, X_val_linreg, X_test_linreg, _, _ = preprocess_data(
         X_train, X_val, X_test, numeric_features, categorical_features, scale_numeric=True
     )
@@ -444,7 +486,7 @@ def main():
     regression_results.append(result_linreg)
 
     # Decision Tree Regressor (no scaling needed)
-    print("\n[8/9] Training Decision Tree Regressor...")
+    print("\n[9/11] Training Decision Tree Regressor...")
     X_train_dt_reg, X_val_dt_reg, X_test_dt_reg, _, _ = preprocess_data(
         X_train, X_val, X_test, numeric_features, categorical_features, scale_numeric=False
     )
@@ -468,11 +510,16 @@ def main():
     )
 
     # Generate residuals plot for best model
-    print("\n[9/9] Generating residuals plot...")
+    print("\n[10/11] Generating residuals plot...")
     residuals_path = plot_residuals(
         best_reg["y_test"], best_reg["y_test_pred"], best_reg["model_name"]
     )
     print(f"Saved: {residuals_path}")
+
+    # Generate correlation heatmap plot for best model
+    print("\n[11/11] Generating correlation heatmap...")
+    correlation_heatmap_path = plot_correlation_heatmap(X_train,numeric_features,best_reg["model_name"])
+    print(f"Saved: {correlation_heatmap_path}")
 
     # =========================================================================
     # SAVE SUMMARY TABLES

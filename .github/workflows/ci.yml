@@ -3,8 +3,6 @@ name: CI - Code Quality & Tests
 on:
   pull_request:
     branches: [ main, midpoint ]
-  push:
-    branches: [ main, midpoint ]
 
 jobs:
   lint-and-test:
@@ -19,6 +17,15 @@ jobs:
       with:
         python-version: '3.10'
         cache: 'pip'
+        
+    - name: Cache dataset
+      run: |
+        mkdir -p data
+        if [ ! -f data/energy_efficiency.csv ]; then
+          curl -k -o data/energy_efficiency.csv.tmp "https://archive.ics.uci.edu/static/public/242/data.csv"
+          python -c "import pandas as pd; df = pd.read_csv('data/energy_efficiency.csv.tmp'); df.columns = df.columns.str.lower(); df = df.rename(columns={'y1': 'heating_load', 'y2': 'cooling_load'}); df.to_csv('data/energy_efficiency.csv', index=False)"
+          rm data/energy_efficiency.csv.tmp
+        fi
         
     - name: Install dependencies
       run: |

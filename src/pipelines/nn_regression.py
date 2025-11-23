@@ -43,12 +43,13 @@ def run_nn_regression_pipeline(
         X_train, X_val, X_test, numeric_features, categorical_features, scale_numeric=True
     )
     
-    # Create MLP regressor with default configuration
+    # Create MLP regressor with tuned hyperparameters
+    # Tuned via GridSearchCV: Best CV MAE = 0.4850
     model = create_mlp_regressor(
-        hidden_layer_sizes=(64, 32),
-        learning_rate_init=0.001,
-        alpha=0.001,
-        batch_size=32,
+        hidden_layer_sizes=(64, 32),  # Tuned: 2 layers optimal
+        learning_rate_init=0.001,     # Tuned: lower learning rate
+        alpha=0.0001,                 # Tuned: lower regularization
+        batch_size=32,                # Tuned: 32 batch size
         max_iter=500,
         random_state=RANDOM_SEED,
         early_stopping=True,

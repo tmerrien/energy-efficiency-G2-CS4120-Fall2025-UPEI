@@ -1,0 +1,49 @@
+{
+  "classification": {
+    "best_params": {
+      "alpha": 0.0001,
+      "batch_size": 32,
+      "hidden_layer_sizes": [
+        64
+      ],
+      "learning_rate_init": 0.01
+    },
+    "best_cv_score": 0.9576093123342329,
+    "metric": "f1_macro"
+  },
+  "regression": {
+    "best_params": {
+      "alpha": 0.0001,
+      "batch_size": 32,
+      "hidden_layer_sizes": [
+        64,
+        32
+      ],
+      "learning_rate_init": 0.001
+    },
+    "best_cv_score": 0.4850334248071171,
+    "metric": "mae"
+  },
+  "search_space": {
+    "hidden_layer_sizes": [
+      "(64,)",
+      "(128,)",
+      "(64, 32)",
+      "(128, 64)"
+    ],
+    "learning_rate_init": [
+      0.001,
+      0.01
+    ],
+    "alpha": [
+      0.0001,
+      0.001,
+      0.01
+    ],
+    "batch_size": [
+      32,
+      64
+    ]
+  },
+  "method": "GridSearchCV with 3-fold cross-validation"
+}

@@ -26,6 +26,15 @@ jobs:
         python-version: '3.10'
         cache: 'pip'
         
+    - name: Cache dataset
+      run: |
+        mkdir -p data
+        if [ ! -f data/energy_efficiency.csv ]; then
+          curl -k -o data/energy_efficiency.csv.tmp "https://archive.ics.uci.edu/static/public/242/data.csv"
+          python -c "import pandas as pd; df = pd.read_csv('data/energy_efficiency.csv.tmp'); df.columns = df.columns.str.lower(); df = df.rename(columns={'y1': 'heating_load', 'y2': 'cooling_load'}); df.to_csv('data/energy_efficiency.csv', index=False)"
+          rm data/energy_efficiency.csv.tmp
+        fi
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -79,15 +88,24 @@ jobs:
         echo "### 🖼️ Visualizations" >> report.md
         echo "" >> report.md
         
-        # Add confusion matrix
+        # Publish images and add to report
         echo "#### Confusion Matrix (Best Classification Model)" >> report.md
-        echo "![Confusion Matrix](./outputs/plots/confusion_matrix_decision_tree.png)" >> report.md
+        cml asset publish outputs/plots/confusion_matrix_decision_tree.png --md >> report.md
         
         echo "" >> report.md
         
-        # Add residuals plot
         echo "#### Residuals Plot (Best Regression Model)" >> report.md
-        echo "![Residuals](./outputs/plots/residuals_decision_tree_regressor.png)" >> report.md
+        cml asset publish outputs/plots/residuals_decision_tree_regressor.png --md >> report.md
+        
+        echo "" >> report.md
+        
+        echo "#### Target Distribution (Best Classification Model)" >> report.md
+        cml asset publish outputs/plots/target_distribution_decision_tree.png --md >> report.md
+        
+        echo "" >> report.md
+        
+        echo "#### Correlation Heatmap" >> report.md
+        cml asset publish outputs/plots/correlation_heatmap_decision_tree_regressor.png --md >> report.md
         
         # Post report as PR comment with inline images
         cml comment create report.md

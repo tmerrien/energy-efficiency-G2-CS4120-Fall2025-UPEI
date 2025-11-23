@@ -90,22 +90,26 @@ jobs:
         
         # Publish images and add to report
         echo "#### Confusion Matrix (Best Classification Model)" >> report.md
-        cml asset publish outputs/plots/confusion_matrix_decision_tree.png --md >> report.md
+        echo "" >> report.md
+        cml asset publish outputs/plots/confusion_matrix_decision_tree.png --md --title "Confusion Matrix" >> report.md
         
         echo "" >> report.md
         
         echo "#### Residuals Plot (Best Regression Model)" >> report.md
-        cml asset publish outputs/plots/residuals_decision_tree_regressor.png --md >> report.md
+        echo "" >> report.md
+        cml asset publish outputs/plots/residuals_decision_tree_regressor.png --md --title "Residuals Plot" >> report.md
         
         echo "" >> report.md
         
         echo "#### Target Distribution (Best Classification Model)" >> report.md
-        cml asset publish outputs/plots/target_distribution_decision_tree.png --md >> report.md
+        echo "" >> report.md
+        cml asset publish outputs/plots/target_distribution_decision_tree.png --md --title "Target Distribution" >> report.md
         
         echo "" >> report.md
         
         echo "#### Correlation Heatmap" >> report.md
-        cml asset publish outputs/plots/correlation_heatmap_decision_tree_regressor.png --md >> report.md
+        echo "" >> report.md
+        cml asset publish outputs/plots/correlation_heatmap_decision_tree_regressor.png --md --title "Correlation Heatmap" >> report.md
         
         # Post report as PR comment with inline images
         cml comment create report.md

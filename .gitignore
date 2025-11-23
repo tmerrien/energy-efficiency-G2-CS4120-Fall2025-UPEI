@@ -37,12 +37,9 @@ ENV/
 mlruns/
 mlartifacts/
 
-# Outputs
-outputs/
-*.png
-*.jpg
-*.jpeg
-*.pdf
+# Outputs (keep plots for documentation)
+# outputs/
+# Note: outputs/plots/ is tracked for documentation, metrics are still ignored
 
 # OS
 .DS_Store

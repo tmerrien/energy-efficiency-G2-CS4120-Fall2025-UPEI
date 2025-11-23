@@ -103,3 +103,49 @@ def plot_correlation_heatmap(x_train: np.ndarray, numeric_features: list, model_
     plt.close()
 
     return str(plot_path)
+
+
+def plot_learning_curves(train_loss: list, val_loss: list, model_name: str, task: str) -> str:
+    """
+    Generate and save learning curve plot showing training and validation loss over epochs.
+    
+    Args:
+        train_loss: Training loss values per epoch
+        val_loss: Validation loss values per epoch
+        model_name: Name of the model for the plot title
+        task: Either 'classification' or 'regression'
+    
+    Returns:
+        Path to the saved plot
+    """
+    plt.figure(figsize=(10, 6))
+    
+    epochs = range(1, len(train_loss) + 1)
+    
+    plt.plot(epochs, train_loss, 'b-', label='Training Loss', linewidth=2)
+    if val_loss:
+        plt.plot(epochs, val_loss, 'r-', label='Validation Loss', linewidth=2)
+    
+    plt.xlabel('Epoch', fontsize=12)
+    plt.ylabel('Loss', fontsize=12)
+    plt.title(f'Learning Curves - {model_name} ({task.capitalize()})', fontsize=14)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    
+    # Add final loss values as text
+    final_train_loss = train_loss[-1]
+    text_str = f'Final Training Loss: {final_train_loss:.4f}'
+    if val_loss:
+        final_val_loss = val_loss[-1]
+        text_str += f'\nFinal Validation Loss: {final_val_loss:.4f}'
+    
+    plt.text(0.02, 0.98, text_str, transform=plt.gca().transAxes,
+             fontsize=10, verticalalignment='top',
+             bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+    
+    plt.tight_layout()
+    plot_path = PLOTS_DIR / f"learning_curves_{task}_{model_name.lower().replace(' ', '_')}.png"
+    plt.savefig(plot_path, dpi=150, bbox_inches="tight")
+    plt.close()
+    
+    return str(plot_path)

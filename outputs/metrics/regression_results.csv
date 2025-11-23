@@ -1,0 +1,4 @@
+Model,Val_MAE,Val_RMSE,Test_MAE,Test_RMSE
+Linear_Regression,2.1449,2.8685,1.9285,2.6029
+Decision_Tree_Regressor,0.3741,0.6009,0.3867,0.5801
+Neural_Network,0.4384,0.5863,0.4336,0.5984

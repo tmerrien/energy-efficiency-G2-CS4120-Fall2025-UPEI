@@ -1,0 +1,4 @@
+Model,Val_Accuracy,Val_F1,Test_Accuracy,Test_F1
+Logistic_Regression,0.9351,0.9350,0.9416,0.9415
+Decision_Tree,0.9870,0.9870,0.9740,0.9739
+Neural_Network,0.9221,0.9220,0.9545,0.9545

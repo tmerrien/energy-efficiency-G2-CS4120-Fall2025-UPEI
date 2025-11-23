@@ -169,3 +169,4 @@ in the data. As we learn about different architectures in the coming weeks, we w
 approach for our dataset. The neural network will integrate into our existing modular pipeline and leverage
 MLflow for experiment tracking. Our goal is to improve upon the strong Decision Tree baseline while
 maintaining reproducibility and preparing deployment-ready model artifacts.
+>>>>>>> origin/main

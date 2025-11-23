@@ -82,6 +82,7 @@ jobs:
         echo "" >> report.md
         echo "\`\`\`json" >> report.md
         cat outputs/metrics/config.json >> report.md
+        echo "" >> report.md
         echo "\`\`\`" >> report.md
         
         echo "" >> report.md

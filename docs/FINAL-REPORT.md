@@ -28,7 +28,8 @@ model of those tested. In this case, the Decision Tree model outperformed the Ne
 in all but one category, Validation set RMSE. From what we observed, the Neural Network
 seemed to down weigh samples, leading to both a lower ceiling and lower floor than other models.
 Furthermore, the Neural Network resulted in a wider residual spread than other models. This time, however,
-the model appeared to have difficulty with samples containing lower heating loads.
+the model appeared to have difficulty with samples containing lower heating loads, indicating a possible
+underutilization of regularization within this model.
 
 #### Table 2 – Regression comparison
 

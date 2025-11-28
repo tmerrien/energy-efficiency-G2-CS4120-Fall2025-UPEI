@@ -8,7 +8,7 @@ import mlflow
 import numpy as np
 
 from ..config import RANDOM_SEED
-from ..evaluation.visualization import plot_learning_curves, plot_residuals
+from ..evaluation.visualization import plot_learning_curves
 from ..models.nn_regressor import create_mlp_regressor
 from ..preprocessing.transformers import preprocess_data
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -110,7 +110,7 @@ def run_nn_regression_pipeline(
         )
         mlflow.log_artifact(plot_path)
         
-        print(f"\nNeural Network Results:")
+        print("\nNeural Network Results:")
         print(f"  Val  - MAE: {val_mae:.4f}, RMSE: {val_rmse:.4f}")
         print(f"  Test - MAE: {test_mae:.4f}, RMSE: {test_rmse:.4f}")
         print(f"  Converged in {model.n_iter_} iterations")

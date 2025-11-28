@@ -12,11 +12,11 @@ High-level workflow:
 import mlflow
 import numpy as np
 
-from .config import RANDOM_SEED
-from .evaluation.results import save_results
-from .pipelines.classification import run_classification_pipeline
-from .pipelines.regression import run_regression_pipeline
-from .utils.data_prep import load_and_split_data
+from src.config import RANDOM_SEED
+from src.evaluation.results import save_results
+from src.pipelines.classification import run_classification_pipeline
+from src.pipelines.regression import run_regression_pipeline
+from src.data.preparation import load_and_split_data
 
 
 def main():

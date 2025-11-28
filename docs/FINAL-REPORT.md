@@ -44,6 +44,79 @@ underutilization of regularization within this model.
 ![residuals](../outputs/plots/residuals_decision_tree_regressor.png)
 
 
+---
+
+## 4. Improvement Analysis – Midpoint → Final
+For this final submission, we have
+- Added an MLPClassifier and MLPRegressor
+- Used GridSearchCV hyperparameter tuning with 3-fold cross-validation
+- Done some refractoring, including separating training scripts and reorganizing modules
+- Tested multiple NN architectures/hyperparameters
+- Added early stopping and validation monitoring to prevent overfitting
+
+
+#### Table 3 – Classification Performance: Midpoint vs Final
+
+| Model          | Midpoint Val F1 | Final Val F1 | Midpoint Test F1 | Final Test F1 | Change       |
+|----------------|-----------------|--------------|------------------|---------------|--------------|
+| Decision Tree  | 0.9870          | 0.9870       | 0.9739           | 0.9739        | No change    |
+| Neural Network | N/A             | 0.9220       | N/A              | 0.9545        | **New model** |
+
+**Key Observations:**
+- Decision Tree F1: **0.9739** (test)
+- Neural Network F1: **0.9545** (test)
+- **Gap: ~2.0%** lower F1 for NN vs Decision Tree
+
+
+#### Table 4 – Regression Performance: Midpoint vs Final
+
+| Model                   | Midpoint Val MAE | Final Val MAE | Midpoint Test MAE | Final Test MAE | Change       |
+|-------------------------|------------------|---------------|-------------------|----------------|--------------|
+| Linear Regression       | 2.1449           | 2.1449        | 1.9285            | 1.9285         | No change    |
+| Decision Tree Regressor | 0.3741           | 0.3741        | 0.3867            | 0.3867         | No change    |
+| Neural Network          | N/A              | 0.4384        | N/A               | 0.4336         | **New model** |
+
+**Key Observations:**
+- Decision Tree MAE: **0.3867** (test)
+- Neural Network MAE: **0.4336** (test)
+- **Gap: ~12.1%** higher error for NN vs Decision Tree
+
+
+#### Hyperparameter Tuning Results
+
+**Grid Search Configuration:**
+- **Search space tested:** 32 hyperparameter combinations
+- **Method:** 3-fold cross-validation with GridSearchCV
+- **Architectures:** (64,), (128,), (64,32), (128,64) hidden layer configurations
+- **Learning rates:** 0.001, 0.01
+- **Regularization (alpha):** 0.0001, 0.001, 0.01
+- **Batch sizes:** 32, 64
+
+**Best Hyperparameters Found:**
+
+| Task           | Hidden Layers | Learning Rate | Alpha  | Batch Size | CV Score         |
+|----------------|---------------|---------------|--------|------------|------------------|
+| Classification | (64,)         | 0.01          | 0.0001 | 32         | 0.9576 (F1)      |
+| Regression     | (64, 32)      | 0.001         | 0.0001 | 32         | 0.4850 (MAE)     |
+
+
+Neural networks didn't outperform the decision tree. The dataset is too small for deep learning to shine,
+and only 8 features makes the set not high-dimensional enough. Decision trees are more appropriate for
+representing physical relationships like compactness and heating load in our case. NN seems too complex
+for this problem type. There should be also a stronger feature interactions when working on physics problems
+like such. At then end, we have found that a shallow network worked better than a deep one and we have been able
+to limit overfitting through early stopping and GridSearchCV helped us a lot to find the best possible NN, though
+it could not overcome the fundamental limitations of the problem.
+
+Specifically, the NN achieved 95.45% test F1 for classification versus the Decision Tree's 97.39%, and for
+regression, the NN's MAE of 0.4336 was 12% higher than the Decision Tree's 0.3867. The validation-test
+gap was very small (and sometimes reversed), suggesting a slight underfitting rather than an overfitting. This
+experience shows again that not all problems need neural networks—classical ML are the best on structured,
+small tabular data where building physics has discrete, rule-based relationships that trees model naturally.
+
+
+---
+
 ## 5. Risks, Ethics, and Limitations
 
 
@@ -66,4 +139,49 @@ who live in irregularly shaped homes or apartments could face unjust taxation du
 The next steps for modeling energy efficiency would be to increase the number of samples
 in the dataset, more specifically implementing some sort of cross-regional tests to ensure
 diversity in the shape and design of structure samples.
+
+
+---
+
+## 6. Feature Importance and Interpretability
+
+In order to understand which building features are the base for heating load predictions, we looked for the feature 
+importance from the Decision Tree Regressor using its built-in feature_importances_ attribute, which measures 
+Gini importance (how much each feature decreases weighted impurity across splits). Tree-based models provide a clear
+interpretation compared to neural networks. After one-hot encoding categorical features like orientation and glazing
+distribution, we analyzed importance across 14 total features.
+
+
+#### Plot 5: Top 10 Feature Importances (Decision Tree Regressor)
+![feature_importance](../outputs/plots/feature_importance_decision_tree_regressor.png)
+
+#### Table 5 – Feature Importance Rankings
+
+| Rank | Feature                        | Importance | Cumulative |
+|------|--------------------------------|------------|------------|
+| 1    | x1 (Relative Compactness)      | 0.7966     | 79.7%      |
+| 2    | x3 (Wall Area)                 | 0.0958     | 89.2%      |
+| 3    | x7 (Glazing Area)              | 0.0760     | 96.8%      |
+| 4    | x8_0 (Glazing Distribution: 0) | 0.0218     | 99.0%      |
+| 5    | x2 (Surface Area)              | 0.0075     | 99.8%      |
+| 6    | x4 (Roof Area)                 | 0.0016     | 99.9%      |
+| 7+   | All other features             | < 0.001    | 100.0%     |
+
+The results align strongly with building physics principles. Relative Compactness (x1) is the strongest at 79.7%
+importance because compact buildings have lower surface-area-to-volume ratios, which reduces heat loss through exterior 
+surfaces. Wall Area (x3) ranks second at 9.6% as walls are the main heat loss points, with larger wall surfaces allowing 
+more thermal energy to escape. Glazing Area (x7) contributes 7.6% since windows lose heat significantly faster than 
+insulated walls, making total window area a key efficiency factor. Surface Area (x2) and Roof Area (x4) showing a minimal
+importance despite their physical relevance, likely because they are highly related with compactness (-0.99 correlation 
+from our midpoint analysis), causing the tree to select x1 as the more informative feature. Categorical features like 
+orientation and glazing distribution were negligible. This suggests that building geometry dominates over directional or
+distribution factors in this dataset.
+
+This feature importance analysis explains clearly why Decision Trees outperformed Neural Networks in our experiments.
+One dominant feature accounting for 80% of predictive power and the tree-based splits was highly effective. The model
+can create simple, interpretable rules like "if compactness < 0.75, predict high heating load." Neural networks tries
+to learn smooth, complex functions distributed across all features, but struggle when the importance is concentrated in
+a single variable where threshold-based splitting is the best. This skew proves why our Decision Tree achieved superior
+performance even though we have completed neural network hyperparameter tuning. In conclusion, prioritizing compactness 
+is the single most effective action for improving energy efficiency.
 

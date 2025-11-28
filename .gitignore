@@ -40,6 +40,8 @@ mlartifacts/
 # Outputs (keep plots for documentation)
 # outputs/
 # Note: outputs/plots/ is tracked for documentation, metrics are still ignored
+outputs/logs/
+*.log
 
 # OS
 .DS_Store

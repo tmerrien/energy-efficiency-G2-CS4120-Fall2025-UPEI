@@ -8,7 +8,7 @@ import mlflow
 import numpy as np
 
 from ..config import RANDOM_SEED
-from ..evaluation.visualization import plot_confusion_matrix, plot_learning_curves, plot_target_distribution
+from ..evaluation.visualization import plot_learning_curves
 from ..models.nn_classifier import create_mlp_classifier
 from ..preprocessing.transformers import preprocess_data
 from sklearn.metrics import accuracy_score, f1_score
@@ -121,7 +121,7 @@ def run_nn_classification_pipeline(
         )
         mlflow.log_artifact(plot_path)
         
-        print(f"\nNeural Network Results:")
+        print("\nNeural Network Results:")
         print(f"  Val  - Accuracy: {val_acc:.4f}, F1: {val_f1:.4f}")
         print(f"  Test - Accuracy: {test_acc:.4f}, F1: {test_f1:.4f}")
         print(f"  Converged in {model.n_iter_} iterations")

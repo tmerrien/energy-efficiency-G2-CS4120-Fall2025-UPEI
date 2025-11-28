@@ -32,7 +32,20 @@ pip install -r requirements-dev.txt
 ### Run Preview Script
 ```bash
 # From the project root directory
-python -m src.utils.preview_targets
+python scripts/preview_dataset.py
+```
+
+### Train Models
+```bash
+# Train all baseline models (classification + regression)
+python scripts/train_all.py
+
+# Or train specific tasks
+python scripts/train_classification.py
+python scripts/train_regression.py
+
+# Tune neural network hyperparameters
+python scripts/tune_hyperparameters.py
 ```
 
 ## CI/CD Pipeline
@@ -58,27 +71,37 @@ project/
 │       ├── README.md              # CI/CD documentation
 │       ├── ci.yml                 # Code quality checks
 │       └── ml-train.yml           # ML training & reporting
-├── src/                           # Source code (modular architecture)
+├── scripts/                       # Executable entry points
+│   ├── train_all.py               # Train all baseline models
+│   ├── train_classification.py    # Train classification models only
+│   ├── train_regression.py        # Train regression models only
+│   ├── tune_hyperparameters.py    # Neural network hyperparameter tuning
+│   └── preview_dataset.py         # Dataset preview tool
+├── src/                           # Source code (library modules)
 │   ├── config.py                  # Configuration constants
-│   ├── train.py                   # Main training orchestrator
 │   ├── data/                      # Data loading and splitting
 │   │   ├── loader.py              # Dataset loading utilities
 │   │   ├── splitter.py            # Train/val/test split logic
-│   │   └── tasks.py               # Task-specific helpers
+│   │   ├── targets.py             # Target extraction utilities
+│   │   └── preparation.py         # Data preparation helpers
 │   ├── preprocessing/             # Data preprocessing
 │   │   └── transformers.py        # Feature transformers
-│   ├── models/                    # Model training
-│   │   └── trainers.py            # Model training utilities
+│   ├── models/                    # Model definitions
+│   │   ├── baselines.py           # Baseline model trainers
+│   │   ├── nn_classifier.py       # Neural network classifier
+│   │   └── nn_regressor.py        # Neural network regressor
 │   ├── pipelines/                 # End-to-end pipelines
-│   │   ├── classification.py      # Classification pipeline
-│   │   └── regression.py          # Regression pipeline
-│   ├── evaluation/                # Results and visualization
-│   │   ├── visualization.py       # Plot generation
-│   │   └── results.py             # Results saving utilities
-│   └── utils/                     # Utility scripts
-│       └── preview_targets.py     # Dataset preview tool
+│   │   ├── classification.py      # Classification baseline pipeline
+│   │   ├── regression.py          # Regression baseline pipeline
+│   │   ├── nn_classification.py   # NN classification pipeline
+│   │   └── nn_regression.py       # NN regression pipeline
+│   └── evaluation/                # Results and visualization
+│       ├── visualization.py       # Plot generation
+│       └── results.py             # Results saving utilities
 ├── outputs/                       # Generated artifacts
+│   ├── logs/                      # Training logs
 │   ├── metrics/                   # Evaluation metrics (CSV, JSON)
+│   ├── models/                    # Saved model files
 │   └── plots/                     # Visualization plots (PNG)
 ├── mlruns/                        # MLflow experiment tracking
 └── docs/                          # Documentation

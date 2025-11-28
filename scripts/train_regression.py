@@ -7,12 +7,12 @@ Trains both baseline models and neural networks for the regression task.
 import mlflow
 import numpy as np
 
-from .config import RANDOM_SEED, TARGET_COL, TEST_SIZE, VAL_SIZE
-from .data.loader import load_energy_efficiency
-from .data.splitter import train_val_test_split_indices
-from .pipelines.regression import run_regression_pipeline
-from .pipelines.nn_regression import run_nn_regression_pipeline
-from .preprocessing.transformers import prepare_features, sanity_check_data
+from src.config import RANDOM_SEED, TARGET_COL, TEST_SIZE, VAL_SIZE
+from src.data.loader import load_energy_efficiency
+from src.data.splitter import train_val_test_split_indices
+from src.pipelines.regression import run_regression_pipeline
+from src.pipelines.nn_regression import run_nn_regression_pipeline
+from src.preprocessing.transformers import prepare_features, sanity_check_data
 
 
 def main():

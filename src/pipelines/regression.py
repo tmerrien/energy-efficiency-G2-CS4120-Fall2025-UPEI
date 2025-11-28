@@ -8,7 +8,7 @@ from sklearn.tree import DecisionTreeRegressor
 
 from ..config import RANDOM_SEED
 from ..evaluation.visualization import plot_correlation_heatmap, plot_residuals
-from ..models.trainers import train_regression_model
+from ..models.baselines import train_regression_model
 from ..preprocessing.transformers import preprocess_data
 
 

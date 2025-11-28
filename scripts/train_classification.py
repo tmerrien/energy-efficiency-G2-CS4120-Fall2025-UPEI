@@ -7,13 +7,12 @@ Trains both baseline models and neural networks for the classification task.
 import mlflow
 import numpy as np
 
-from .config import RANDOM_SEED, TARGET_COL, TEST_SIZE, VAL_SIZE
-from .data.loader import load_energy_efficiency
-from .data.splitter import train_val_test_split_indices
-from .evaluation.results import save_results
-from .pipelines.classification import run_classification_pipeline
-from .pipelines.nn_classification import run_nn_classification_pipeline
-from .preprocessing.transformers import prepare_features, sanity_check_data
+from src.config import RANDOM_SEED, TARGET_COL, TEST_SIZE, VAL_SIZE
+from src.data.loader import load_energy_efficiency
+from src.data.splitter import train_val_test_split_indices
+from src.pipelines.classification import run_classification_pipeline
+from src.pipelines.nn_classification import run_nn_classification_pipeline
+from src.preprocessing.transformers import prepare_features, sanity_check_data
 
 
 def main():
@@ -36,7 +35,6 @@ def main():
 
     # Create stratified splits
     print("\n[3/5] Creating train/val/test splits...")
-    y_regression = df[TARGET_COL].values
 
     # Compute threshold on train set only
     idx_train, idx_val, idx_test = train_val_test_split_indices(

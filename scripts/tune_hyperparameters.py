@@ -8,15 +8,14 @@ and regression neural network models.
 import json
 from pathlib import Path
 
-import mlflow
 import numpy as np
 from sklearn.model_selection import GridSearchCV
 from sklearn.neural_network import MLPClassifier, MLPRegressor
 
-from .config import RANDOM_SEED, TARGET_COL, TEST_SIZE, VAL_SIZE
-from .data.loader import load_energy_efficiency
-from .data.splitter import train_val_test_split_indices
-from .preprocessing.transformers import prepare_features, preprocess_data, sanity_check_data
+from src.config import RANDOM_SEED, TARGET_COL, TEST_SIZE, VAL_SIZE
+from src.data.loader import load_energy_efficiency
+from src.data.splitter import train_val_test_split_indices
+from src.preprocessing.transformers import prepare_features, preprocess_data
 
 
 # Define parameter grid (same for both tasks)
@@ -102,8 +101,8 @@ def run_grid_search(X_trainval, y_trainval, model_type='classifier'):
     Returns:
         GridSearchCV fitted object
     """
-    print(f"\n[2/3] Running GridSearchCV...")
-    print(f"Parameter grid:")
+    print("\n[2/3] Running GridSearchCV...")
+    print("Parameter grid:")
     for param, values in PARAM_GRID.items():
         print(f"  {param}: {values}")
     print(f"\nTotal combinations: {np.prod([len(v) for v in PARAM_GRID.values()])}")
@@ -145,9 +144,9 @@ def tune_classification_nn():
     grid_search = run_grid_search(X_trainval, y_trainval, model_type='classifier')
     
     # Print results
-    print(f"\n[3/3] Results:")
+    print("\n[3/3] Results:")
     print(f"Best score (CV F1): {grid_search.best_score_:.4f}")
-    print(f"Best parameters:")
+    print("Best parameters:")
     for param, value in grid_search.best_params_.items():
         print(f"  {param}: {value}")
     
@@ -177,9 +176,9 @@ def tune_regression_nn():
     grid_search = run_grid_search(X_trainval, y_trainval, model_type='regressor')
     
     # Print results
-    print(f"\n[3/3] Results:")
+    print("\n[3/3] Results:")
     print(f"Best score (CV MAE): {-grid_search.best_score_:.4f}")
-    print(f"Best parameters:")
+    print("Best parameters:")
     for param, value in grid_search.best_params_.items():
         print(f"  {param}: {value}")
     

@@ -6,7 +6,7 @@ import numpy as np
 
 from src.data.loader import load_energy_efficiency
 from src.data.splitter import train_val_test_split_indices
-from src.data.tasks import get_regression_target, make_classification_labels_from_hl
+from src.data.targets import get_regression_target, make_classification_labels_from_hl
 
 
 def main() -> None:
